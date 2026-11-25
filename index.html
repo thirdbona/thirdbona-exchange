@@ -129,6 +129,29 @@
         </label>
         <input id="username" type="text" placeholder="e.g. thirdbona (exact username)"
           class="w-full px-4 py-3.5 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 focus:outline-none text-sm text-white placeholder:text-slate-500 transition" />
+        <!-- First-Purchase Promo Code Box -->
+<div id="promo-box" class="mt-3">
+  <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">
+    New User Promo Code (Optional)
+  </label>
+  <div class="flex gap-2">
+    <input
+      type="text"
+      id="promoInput"
+      placeholder="Enter code e.g. NEW30M"
+      class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white uppercase focus:outline-none focus:border-emerald-500"
+    />
+    <button
+      type="button"
+      onclick="applyPromoCode()"
+      class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition"
+    >
+      Apply
+    </button>
+  </div>
+  <p id="promoStatus" class="text-xs mt-1.5 hidden"></p>
+</div>
+
 
         <!-- Live Username Status Card -->
         <div id="usernameStatusCard" class="hidden mt-3 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30">
@@ -292,6 +315,35 @@
     const WHATSAPP_NUMBER = "2348024524764";
     const SELLER_TAG = "@thirdbona";
     const PAYSTACK_PUBLIC_KEY = 'pk_live_b929726364f6d9115406af020df5db3a560cd26f';// Paste your live/test Paystack Public Key
+    const PROMO_CODE = 'NEW30M';
+const PROMO_BONUS_TEXT = '+30M Extra Bonus';
+let promoApplied = false;
+
+function applyPromoCode() {
+  const input = document.getElementById('promoInput');
+  const status = document.getElementById('promoStatus');
+  const code = input.value.trim().toUpperCase();
+
+  status.classList.remove('hidden', 'text-emerald-400', 'text-red-400');
+
+  if (localStorage.getItem('thirdbona_first_promo_used') === 'true') {
+    promoApplied = false;
+    status.textContent = '❌ This promo code is valid for first-time purchases only.';
+    status.classList.add('text-red-400');
+    return;
+  }
+
+  if (code === PROMO_CODE) {
+    promoApplied = true;
+    status.textContent = `✅ Promo applied! You get ${PROMO_BONUS_TEXT} on your first purchase.`;
+    status.classList.add('text-emerald-400');
+  } else {
+    promoApplied = false;
+    status.textContent = '❌ Invalid promo code.';
+    status.classList.add('text-red-400');
+  }
+}
+
     const SELL_RATE_PER_1000B = 3500;
 
     // Optional list of known/returning usernames (lowercase without @)
