@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thirdbona Exchange — Lagos Life Cash Buy & Sell</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <style>
+    body {
+      background:
+        radial-gradient(circle at top, rgba(16, 185, 129, 0.14), transparent 45%),
+        radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.08), transparent 40%),
+        #050811;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+    }
+  </style>
+</head>
+<body class="text-slate-100 font-sans antialiased min-h-screen pb-16">
+
+  <!-- Top Bar -->
+  <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
+    <div class="max-w-xl mx-auto px-4 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center font-black text-slate-950 text-base shadow-lg shadow-emerald-500/20">
+          TB
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base font-extrabold tracking-tight text-white">Thirdbona Exchange</h1>
+            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+              Lagos Life
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Fast Cash • Bank Transfer & WhatsApp</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-semibold">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        Active
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-xl mx-auto px-4 pt-6 space-y-5">
+
+    <!-- Hero Stats Banner -->
+    <section class="glass-card rounded-2xl p-4 grid grid-cols-3 gap-2 text-center shadow-xl">
+      <div class="p-2 rounded-xl bg-slate-900/70 border border-slate-800/80">
+        <p class="text-[11px] text-slate-400">Delivery</p>
+        <p class="text-sm font-bold text-emerald-400 mt-0.5">30–60s</p>
+      </div>
+      <div class="p-2 rounded-xl bg-slate-900/70 border border-slate-800/80">
+        <p class="text-[11px] text-slate-400">Sell Rate</p>
+        <p class="text-sm font-bold text-amber-300 mt-0.5">₦3,500 / 1T</p>
+      </div>
+      <div class="p-2 rounded-xl bg-slate-900/70 border border-slate-800/80">
+        <p class="text-[11px] text-slate-400">Payments</p>
+        <p class="text-sm font-bold text-white mt-0.5">NGN Bank</p>
+      </div>
+    </section>
+
+    <!-- Mode Switcher -->
+    <div class="grid grid-cols-2 p-1.5 rounded-2xl glass-card">
+      <button id="tabBuy" onclick="switchTab('buy')"
+        class="py-2.5 px-4 rounded-xl text-sm font-bold bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 transition cursor-pointer">
+        Buy Lagos Cash
+      </button>
+      <button id="tabSell" onclick="switchTab('sell')"
+        class="py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-400 hover:text-white transition cursor-pointer">
+        Sell Lagos Cash
+      </button>
+    </div>
+
+    <!-- BUY LAGOS LIFE CASH -->
+    <section id="buySection" class="glass-card rounded-3xl p-5 sm:p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800/90 pb-3.5">
+        <div>
+          <h2 class="text-base font-bold text-white">Buy In-Game Cash</h2>
+          <p class="text-xs text-slate-400">Receive Lagos Life funds straight to your account</p>
+        </div>
+        <span class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+          Instant
+        </span>
+      </div>
+
+      <!-- Step 1: Username -->
+      <div>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+          1. Lagos Life Username
+        </label>
+        <input id="username" type="text" placeholder="e.g. thirdbona (exact username)"
+          class="w-full px-4 py-3.5 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 focus:outline-none text-sm text-white placeholder:text-slate-500 transition" />
+
+        <!-- Live Username Status Card -->
+        <div id="usernameStatusCard" class="hidden mt-3 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 text-xs font-black flex items-center justify-center">✓</span>
+              <span id="previewHandle" class="text-sm font-extrabold text-white">@username</span>
+            </div>
+            <span id="buyerBadge" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
+              Ready
+            </span>
+          </div>
+          <p class="text-xs text-slate-300 mt-1.5">
+            Ready to receive cash. In Lagos Life settings, set <strong class="text-white">"Who can send me money"</strong> to <strong class="text-emerald-300">Anyone</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 2: Select Pack -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-300">
+            2. Select Cash Pack
+          </label>
+          <span class="text-[11px] text-slate-400">Tap to choose</span>
+        </div>
+        <div id="packGrid" class="grid grid-cols-2 gap-2.5"></div>
+      </div>
+
+      <!-- Step 3: Promo Code -->
+      <div>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+          3. Referral / Promo Code <span class="text-slate-500 normal-case font-normal">(Optional)</span>
+        </label>
+        <input id="promoCode" type="text" placeholder="Enter code if you have one"
+          class="w-full px-4 py-3 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-emerald-400 focus:outline-none text-sm text-white placeholder:text-slate-500 transition" />
+      </div>
+
+      <!-- Selected Summary Box -->
+      <div class="rounded-2xl bg-slate-950/80 border border-slate-800 p-3.5 flex items-center justify-between">
+        <div>
+          <p class="text-[11px] text-slate-400">Selected Order</p>
+          <p id="summaryText" class="text-sm font-bold text-white mt-0.5">20B Lagos Cash</p>
+        </div>
+        <div class="text-right">
+          <p class="text-[11px] text-slate-400">Total to Pay</p>
+          <p id="summaryPrice" class="text-lg font-extrabold text-emerald-400">₦500</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2.5 pt-1">
+        <button onclick="payWithBankTransfer()"
+          class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-emerald-500/20 transition cursor-pointer">
+          Pay Automatically via Bank Transfer
+        </button>
+
+        <button onclick="orderViaWhatsApp('BUY')"
+          class="w-full py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-300 font-bold text-sm border border-emerald-500/30 transition flex items-center justify-center gap-2 cursor-pointer">
+          <span>Complete Order on WhatsApp</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SELL LAGOS LIFE CASH -->
+    <section id="sellSection" class="hidden glass-card rounded-3xl p-5 sm:p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800/90 pb-3.5">
+        <div>
+          <h2 class="text-base font-bold text-white">Sell In-Game Cash</h2>
+          <p class="text-xs text-slate-400">Send Lagos Life funds to <span class="text-emerald-400 font-semibold">@thirdbona</span> & get paid in Naira</p>
+        </div>
+        <span class="text-xs font-semibold text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">
+          ₦3,500 / 1T
+        </span>
+      </div>
+
+      <!-- Receiving Account Box -->
+      <div class="rounded-2xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 p-4 flex items-center justify-between gap-3">
+        <div>
+          <p class="text-[11px] uppercase tracking-wider text-emerald-300/80 font-semibold">Send Lagos Life Cash To</p>
+          <p class="text-lg font-black text-white mt-0.5">@thirdbona</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Rate: ₦3,500 per 1,000B (1T)</p>
+        </div>
+        <button onclick="copyUsername('@thirdbona')"
+          class="px-3 py-2 rounded-xl bg-slate-950/90 hover:bg-slate-900 border border-slate-700 text-xs font-bold text-emerald-400 transition shrink-0 cursor-pointer">
+          Copy Tag
+        </button>
+      </div>
+
+      <!-- Amount Sending -->
+      <div>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+          Amount You Are Sending (in Billions)
+        </label>
+        <input id="sellAmount" type="number" min="1" placeholder="e.g. 250 or 1000" oninput="calculatePayout()"
+          class="w-full px-4 py-3.5 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-emerald-400 focus:outline-none text-sm text-white placeholder:text-slate-500 transition" />
+        <div class="mt-2 px-3.5 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 flex items-center justify-between">
+          <span class="text-xs text-slate-400">Estimated Naira Payout:</span>
+          <span id="payoutPreview" class="text-base font-extrabold text-amber-300">₦0</span>
+        </div>
+      </div>
+
+      <!-- Payout Bank Info -->
+      <div class="space-y-2.5">
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+          Your Nigerian Bank Details
+        </label>
+        <input id="bankName" type="text" placeholder="Bank Name (e.g. OPay, PalmPay, Moniepoint, GTBank)"
+          class="w-full px-4 py-3 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-emerald-400 focus:outline-none text-sm text-white placeholder:text-slate-500" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <input id="accountNumber" type="text" maxlength="10" placeholder="10-Digit Account Number"
+            class="w-full px-4 py-3 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-emerald-400 focus:outline-none text-sm text-white placeholder:text-slate-500" />
+          <input id="accountName" type="text" placeholder="Account Name"
+            class="w-full px-4 py-3 rounded-xl bg-slate-950/90 border border-slate-800 focus:border-emerald-400 focus:outline-none text-sm text-white placeholder:text-slate-500" />
+        </div>
+      </div>
+
+      <button onclick="orderViaWhatsApp('SELL')"
+        class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-emerald-500/20 transition cursor-pointer">
+        Submit Sell Request on WhatsApp
+      </button>
+    </section>
+
+    <!-- Trust & Safety Footer -->
+    <footer class="text-center text-xs text-slate-500 space-y-1.5 pt-2">
+      <p class="text-slate-400 font-medium">Thirdbona Exchange • Lagos Life Cash Desk</p>
+      <p>We never ask for your account password, PIN, or OTP.</p>
+    </footer>
+  </main>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/2348024524764?text=Hello%20Thirdbona%20Exchange%2C%20I%20need%20help%20with%20Lagos%20Life%20cash."
+     target="_blank" rel="noopener noreferrer"
+     aria-label="Chat on WhatsApp"
+     class="fixed bottom-5 right-5 z-50 px-4 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-2xl shadow-emerald-500/30 flex items-center gap-2 transition">
+    <span>WhatsApp Support</span>
+  </a>
+
+  <script>
+    // PRE-FILLED CONFIG
+    const WHATSAPP_NUMBER = "2348024524764";
+    const SELLER_TAG = "@thirdbona";
+    const PAYSTACK_PUBLIC_KEY = "pk_test_xxxxxxxxxxxxxxxxxxxx"; // Paste your live/test Paystack Public Key
+    const SELL_RATE_PER_1000B = 3500;
+
+    // Optional list of known/returning usernames (lowercase without @)
+    const KNOWN_USERNAMES = ["thirdbona"];
+
+    const packs = [
+      { id: '1b',   label: '1B',    price: 100,  badge: 'Starter' },
+      { id: '20b',  label: '20B',   price: 500,  badge: 'Popular' },
+      { id: '50b',  label: '50B',   price: 1000, badge: 'Value' },
+      { id: '120b', label: '120B',  price: 2000, badge: 'Hot' },
+      { id: '200b', label: '200B',  price: 3000, badge: 'Pro' },
+      { id: '500b', label: '500B',  price: 5000, badge: 'Boss' },
+      { id: '1t',   label: '1.0T',  price: 8000, badge: 'Max Pack' }
+    ];
+
+    let selectedPack = packs[1];
+
+    const usernameInput = document.getElementById('username');
+    const statusCard = document.getElementById('usernameStatusCard');
+    const previewHandle = document.getElementById('previewHandle');
+    const buyerBadge = document.getElementById('buyerBadge');
+
+    usernameInput.addEventListener('input', () => {
+      const cleaned = usernameInput.value.trim().replace(/^@+/, '');
+      if (!cleaned) {
+        statusCard.classList.add('hidden');
+        return;
+      }
+
+      previewHandle.textContent = `@${cleaned}`;
+      const isKnown = KNOWN_USERNAMES.includes(cleaned.toLowerCase());
+      buyerBadge.textContent = isKnown ? 'Verified / Returning' : 'Ready';
+      statusCard.classList.remove('hidden');
+    });
+
+    function renderPacks() {
+      const grid = document.getElementById('packGrid');
+      grid.innerHTML = packs.map(pack => {
+        const active = selectedPack.id === pack.id;
+        return `
+          <button type="button" onclick="selectPack('${pack.id}')"
+            class="text-left p-3.5 rounded-2xl border transition cursor-pointer ${
+              active
+                ? 'bg-emerald-500/15 border-emerald-400 shadow-md shadow-emerald-500/10'
+                : 'bg-slate-950/80 border-slate-800 hover:border-slate-700'
+            }">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-base font-extrabold text-white">${pack.label}</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                active ? 'bg-emerald-400 text-slate-950' : 'bg-slate-800 text-slate-300'
+              }">${pack.badge}</span>
+            </div>
+            <div class="text-sm font-bold text-emerald-400 mt-1.5">₦${pack.price.toLocaleString()}</div>
+          </button>
+        `;
+      }).join('');
+
+      document.getElementById('summaryText').innerText = `${selectedPack.label} Lagos Life Cash`;
+      document.getElementById('summaryPrice').innerText = `₦${selectedPack.price.toLocaleString()}`;
+    }
+
+    function selectPack(id) {
+      const found = packs.find(p => p.id === id);
+      if (found) {
+        selectedPack = found;
+        renderPacks();
+      }
+    }
+
+    function switchTab(tab) {
+      const isBuy = tab === 'buy';
+      document.getElementById('buySection').classList.toggle('hidden', !isBuy);
+      document.getElementById('sellSection').classList.toggle('hidden', isBuy);
+
+      document.getElementById('tabBuy').className = isBuy
+        ? 'py-2.5 px-4 rounded-xl text-sm font-bold bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 transition cursor-pointer'
+        : 'py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-400 hover:text-white transition cursor-pointer';
+
+      document.getElementById('tabSell').className = !isBuy
+        ? 'py-2.5 px-4 rounded-xl text-sm font-bold bg-gradient-to-r from-emerald-400 to-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 transition cursor-pointer'
+        : 'py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-400 hover:text-white transition cursor-pointer';
+    }
+
+    function calculatePayout() {
+      const billions = parseFloat(document.getElementById('sellAmount').value) || 0;
+      const naira = Math.floor((billions / 1000) * SELL_RATE_PER_1000B);
+      document.getElementById('payoutPreview').innerText = `₦${naira.toLocaleString()}`;
+    }
+
+    function copyUsername(tag) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(tag).then(() => {
+          alert(`Copied ${tag} to clipboard!`);
+        }).catch(() => {
+          alert(`Send Lagos Life cash to ${tag}`);
+        });
+      } else {
+        alert(`Send Lagos Life cash to ${tag}`);
+      }
+    }
+
+    function generateOrderId() {
+      return 'TB-' + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    function payWithBankTransfer() {
+      const username = usernameInput.value.trim();
+      if (!username) {
+        alert('Please enter your Lagos Life username first.');
+        return;
+      }
+
+      if (!PAYSTACK_PUBLIC_KEY || PAYSTACK_PUBLIC_KEY.includes('xxxx')) {
+        alert('Paystack key is not added yet. You can tap "Complete Order on WhatsApp" right below to order now.');
+        return;
+      }
+
+      const orderId = generateOrderId();
+      const cleanEmailUser = username.toLowerCase().replace(/[^a-z0-9]/g, '') || 'player';
+
+      const handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: `${cleanEmailUser}@thirdbonaexchange.shop`,
+        amount: selectedPack.price * 100,
+        currency: 'NGN',
+        ref: orderId,
+        channels: ['bank_transfer', 'bank'],
+        metadata: {
+          custom_fields: [
+            { display_name: 'Order ID', variable_name: 'order_id', value: orderId },
+            { display_name: 'Lagos Life Username', variable_name: 'username', value: username },
+            { display_name: 'Pack', variable_name: 'pack', value: selectedPack.label }
+          ]
+        },
+        callback: function(response) {
+          alert(`Payment confirmed! Order ${response.reference} (${selectedPack.label}) is queued for ${username}.`);
+        },
+        onClose: function() {
+          console.log('Payment window closed.');
+        }
+      });
+      handler.openIframe();
+    }
+
+    function orderViaWhatsApp(type) {
+      const orderId = generateOrderId();
+      let message = '';
+
+      if (type === 'BUY') {
+        const username = usernameInput.value.trim();
+        if (!username) {
+          alert('Please enter your Lagos Life username first.');
+          return;
+        }
+        const promo = document.getElementById('promoCode').value.trim() || 'None';
+        message =
+          `Hello Thirdbona Exchange! I want to BUY Lagos Life cash:\n` +
+          `• Order ID: ${orderId}\n` +
+          `• Username: ${username}\n` +
+          `• Pack: ${selectedPack.label} (₦${selectedPack.price.toLocaleString()})\n` +
+          `• Promo Code: ${promo}`;
+      } else {
+        const amount = document.getElementById('sellAmount').value.trim();
+        const bank = document.getElementById('bankName').value.trim();
+        const acctNo = document.getElementById('accountNumber').value.trim();
+        const acctName = document.getElementById('accountName').value.trim();
+
+        if (!amount || !bank || !acctNo || !acctName) {
+          alert('Please enter the amount sent and your complete bank details.');
+          return;
+        }
+
+        const billions = parseFloat(amount) || 0;
+        const payout = Math.floor((billions / 1000) * SELL_RATE_PER_1000B);
+
+        message =
+          `Hello Thirdbona Exchange! I want to SELL Lagos Life cash:\n` +
+          `• Order ID: ${orderId}\n` +
+          `• Sent To: ${SELLER_TAG}\n` +
+          `• Amount Sent: ${amount}B\n` +
+          `• Expected Payout: ₦${payout.toLocaleString()}\n` +
+          `• Bank: ${bank}\n` +
+          `• Account No: ${acctNo}\n` +
+          `• Account Name: ${acctName}`;
+      }
+
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+    }
+
+    renderPacks();
+  </script>
+</body>
+</html>
